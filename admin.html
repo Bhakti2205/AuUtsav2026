@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Admin Panel — UTSAV 2026</title>
+  <link rel="stylesheet" href="css/style.css"/>
+  <link rel="stylesheet" href="css/admin.css"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;900&display=swap" rel="stylesheet"/>
+</head>
+<body>
+
+<!-- LOGIN GATE -->
+<div class="admin-login" id="admin-login">
+  <div class="login-box">
+    <div class="login-logo">⚙ UTSAV <span>Admin</span></div>
+    <h2>Sign In</h2>
+    <p>Access the UTSAV 2026 Admin Panel</p>
+    <div class="form-group">
+      <label>Username</label>
+      <input type="text" id="login-user" placeholder="admin"/>
+    </div>
+    <div class="form-group">
+      <label>Password</label>
+      <input type="password" id="login-pass" placeholder="••••••••"/>
+    </div>
+    <p id="login-error" class="login-error hidden">❌ Invalid credentials. Try: admin / utsav2026</p>
+    <button class="btn btn-primary full-width" id="login-btn">Sign In</button>
+    <p class="login-hint">Demo credentials: <code>admin</code> / <code>utsav2026</code></p>
+  </div>
+</div>
+
+<!-- ADMIN DASHBOARD -->
+<div class="admin-dash hidden" id="admin-dash">
+
+  <!-- SIDEBAR -->
+  <aside class="admin-sidebar" id="admin-sidebar">
+    <div class="sidebar-logo">⚙ UTSAV <span>Admin</span></div>
+    <nav class="sidebar-nav">
+      <a href="#" class="sidebar-link active" data-panel="dashboard"><i class="fa fa-chart-bar"></i> Dashboard</a>
+      <a href="#" class="sidebar-link" data-panel="registrations"><i class="fa fa-users"></i> Registrations</a>
+      <a href="#" class="sidebar-link" data-panel="events"><i class="fa fa-calendar-check"></i> Events</a>
+      <a href="#" class="sidebar-link" data-panel="add-event"><i class="fa fa-plus-circle"></i> Add Event</a>
+    </nav>
+    <a href="index.html" class="sidebar-link" style="margin-top:auto;"><i class="fa fa-arrow-left"></i> Back to Site</a>
+    <button class="sidebar-link logout-btn" id="logout-btn"><i class="fa fa-sign-out-alt"></i> Logout</button>
+  </aside>
+
+  <!-- MAIN CONTENT -->
+  <main class="admin-main">
+    <header class="admin-header">
+      <button class="sidebar-toggle" id="sidebar-toggle"><i class="fa fa-bars"></i></button>
+      <h1 id="panel-title">Dashboard</h1>
+      <div class="admin-user">👤 Admin</div>
+    </header>
+
+    <!-- DASHBOARD PANEL -->
+    <div class="panel active" id="panel-dashboard">
+      <div class="stats-grid" id="stats-grid">
+        <!-- Injected by JS -->
+      </div>
+      <div class="admin-section-title">Registrations by Event</div>
+      <div class="chart-wrap">
+        <canvas id="reg-chart"></canvas>
+      </div>
+      <div class="admin-section-title">Category Distribution</div>
+      <div class="cat-dist" id="cat-dist">
+        <!-- Injected by JS -->
+      </div>
+    </div>
+
+    <!-- REGISTRATIONS PANEL -->
+    <div class="panel" id="panel-registrations">
+      <div class="panel-toolbar">
+        <input type="text" id="reg-search" placeholder="Search by name, email, ID..." class="admin-search"/>
+        <button class="btn btn-outline" id="export-csv"><i class="fa fa-download"></i> Export CSV</button>
+      </div>
+      <div class="table-wrap">
+        <table class="admin-table" id="reg-table">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Name</th>
+              <th>Student ID</th>
+              <th>Email</th>
+              <th>Dept</th>
+              <th>Year</th>
+              <th>Events</th>
+              <th>Registered At</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="reg-table-body"></tbody>
+        </table>
+        <p id="no-reg" class="no-data hidden">No registrations yet.</p>
+      </div>
+    </div>
+
+    <!-- EVENTS PANEL -->
+    <div class="panel" id="panel-events">
+      <div class="panel-toolbar">
+        <input type="text" id="ev-search" placeholder="Search events..." class="admin-search"/>
+      </div>
+      <div class="table-wrap">
+        <table class="admin-table" id="ev-table">
+          <thead>
+            <tr>
+              <th>Icon</th>
+              <th>Event</th>
+              <th>Category</th>
+              <th>Date</th>
+              <th>Venue</th>
+              <th>Capacity</th>
+              <th>Registered</th>
+              <th>Spots Left</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody id="ev-table-body"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ADD EVENT PANEL -->
+    <div class="panel" id="panel-add-event">
+      <div class="add-event-form-wrap">
+        <form id="add-event-form">
+          <div class="form-row">
+            <div class="form-group">
+              <label>Event Name *</label>
+              <input type="text" id="ae-title" required placeholder="e.g. Rhythm Run"/>
+            </div>
+            <div class="form-group">
+              <label>Emoji Icon *</label>
+              <input type="text" id="ae-emoji" required placeholder="e.g. 🥁" maxlength="4"/>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Category *</label>
+              <select id="ae-category" required>
+                <option value="">-- Select --</option>
+                <option value="dance">Dance</option>
+                <option value="sing">Singing</option>
+                <option value="comedy">Comedy</option>
+                <option value="dare">Dare</option>
+                <option value="cultural">Cultural</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Date *</label>
+              <input type="text" id="ae-date" required placeholder="e.g. October 15, 2026"/>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Time *</label>
+              <input type="text" id="ae-time" required placeholder="e.g. 10:00 AM – 1:00 PM"/>
+            </div>
+            <div class="form-group">
+              <label>Venue *</label>
+              <input type="text" id="ae-venue" required placeholder="e.g. University Auditorium"/>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Capacity (max participants) *</label>
+              <input type="number" id="ae-capacity" required min="1" placeholder="e.g. 200"/>
+            </div>
+            <div class="form-group">
+              <label>Who Can Attend *</label>
+              <input type="text" id="ae-attend" required placeholder="e.g. All AU Students"/>
+            </div>
+          </div>
+          <div class="form-group full">
+            <label>Who Can Participate *</label>
+            <input type="text" id="ae-participate" required placeholder="e.g. Solo performers, AU students"/>
+          </div>
+          <div class="form-group full">
+            <label>Description *</label>
+            <textarea id="ae-desc" rows="3" required placeholder="Describe the event..."></textarea>
+          </div>
+          <div class="form-group full">
+            <label>Rules (one per line)</label>
+            <textarea id="ae-rules" rows="4" placeholder="Rule 1&#10;Rule 2&#10;Rule 3"></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary">➕ Add Event</button>
+        </form>
+        <div class="reg-success hidden" id="ae-success">
+          <div class="success-icon">✅</div>
+          <h3>Event Added!</h3>
+          <p>The event has been added and is now visible on the main site.</p>
+          <button class="btn btn-outline" id="ae-add-another">Add Another Event</button>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<script src="js/data.js"></script>
+<script src="js/admin.js"></script>
+</body>
+</html>
